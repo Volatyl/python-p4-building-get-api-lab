@@ -25,9 +25,7 @@ def bakeries():
 
     bakeries = []
     for bakery in Bakery.query.all():
-
-        bakery_dict = {"id": bakery.id, "name": bakery.name}
-        # bakery_dict = bakery.to_dict()
+        bakery_dict = bakery.to_dict()
         bakeries.append(bakery_dict)
 
     response = make_response(jsonify(bakeries), 200)
@@ -41,8 +39,7 @@ def bakeries():
 def bakery_by_id(id):
     bakery = Bakery.query.filter_by(id=id).first()
 
-    # bakery_dict = bakery.to_dict()
-    bakery_dict = {"id": bakery.id, "name": bakery.name}
+    bakery_dict = bakery.to_dict()
     response = make_response(jsonify(bakery_dict), 200)
 
     response.headers["Content-Type"] = "application/json"
@@ -55,7 +52,6 @@ def baked_goods_by_price():
 
     goods = []
     for good in BakedGood.query.order_by(BakedGood.price.desc()).all():
-        # good_dict = {"id": good.id, 'name': good.name, 'price': good.price}
         good_dict = good.to_dict()
         goods.append(good_dict)
 
@@ -70,8 +66,7 @@ def baked_goods_by_price():
 def most_expensive_baked_good():
     good = BakedGood.query.order_by(BakedGood.price.desc()).first()
 
-    good_dict = {"id": good.id, 'name': good.name, 'price': good.price}
-    # good_dict = good.to_dict()
+    good_dict = good.to_dict()
 
     response = make_response(jsonify(good_dict), 200)
 
