@@ -8,13 +8,34 @@ metadata = MetaData(naming_convention={
 
 db = SQLAlchemy(metadata=metadata)
 
+
 class Bakery(db.Model, SerializerMixin):
     __tablename__ = 'bakeries'
 
+    serialize_rules = ('-goods.bakery')
+
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+
+    goods = db.relationship('BakedGood', backref='bakery')
+
+    def __repr__(self):
+        return f'Name: {self.name}, Goods: {self.goods}'
+
 
 class BakedGood(db.Model, SerializerMixin):
     __tablename__ = 'baked_goods'
 
+    serialize_rules = ('-bakery.goods')
+
     id = db.Column(db.Integer, primary_key=True)
-    
+    name = db.Column(db.String)
+    price = db.Column(db.Integer)
+    bakery_id = db.Column(db.Integer, db.ForeignKey('bakeries.id'))
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+
+    def __repr__(self):
+        return f'Name: {self.name}, Price: {self.price}'
